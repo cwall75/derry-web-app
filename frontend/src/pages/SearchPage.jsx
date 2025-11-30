@@ -109,7 +109,7 @@ const SearchPage = () => {
         />
         <div className="text-center">
           <p className="text-derry-blood font-bold text-lg mb-1">MISSING</p>
-          <h3 className="font-vintage text-xl font-bold">
+          <h3 className="font-vintage text-xl font-bold text-black">
             {victim.first_name} {victim.last_name}
           </h3>
           <p className="text-sm text-gray-700 mt-1">Age {victim.age_at_disappearance}</p>
