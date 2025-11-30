@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: derry_db
+    environment:
+      POSTGRES_USER: derry_admin
+      POSTGRES_PASSWORD: pennywise1958
+      POSTGRES_DB: derry_missing
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./images:/images
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U derry_admin -d derry_missing"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  seed:
+    build: .
+    container_name: derry_seed
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: derry_missing
+      DB_USER: derry_admin
+      DB_PASSWORD: pennywise1958
+    command: python seed_database.py
+
+volumes:
+  postgres_data:
