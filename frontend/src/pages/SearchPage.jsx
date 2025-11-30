@@ -20,6 +20,9 @@ const SearchPage = () => {
   useEffect(() => {
     loadStats();
     loadVictims();
+    // Note: loadVictims is intentionally not in dependencies to avoid infinite loops
+    // It will be called explicitly when filters change or search is submitted
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadStats = async () => {
@@ -40,10 +43,18 @@ const SearchPage = () => {
         limit: 100,
       };
 
-      // Remove empty values
+      // Convert age filters to integers and remove empty values
       Object.keys(params).forEach(key => {
         if (params[key] === '' || params[key] === undefined) {
           delete params[key];
+        } else if (key === 'age_min' || key === 'age_max') {
+          // Convert string to integer for age filters
+          const numValue = parseInt(params[key], 10);
+          if (!isNaN(numValue)) {
+            params[key] = numValue;
+          } else {
+            delete params[key];
+          }
         }
       });
 
@@ -51,6 +62,7 @@ const SearchPage = () => {
       setVictims(response.data.victims);
     } catch (err) {
       console.error('Error loading victims:', err);
+      setVictims([]); // Clear victims on error
     } finally {
       setLoading(false);
     }
@@ -73,7 +85,10 @@ const SearchPage = () => {
       age_min: '',
       age_max: '',
     });
-    setTimeout(loadVictims, 100);
+    // Use setTimeout to ensure state updates before loading
+    setTimeout(() => {
+      loadVictims();
+    }, 100);
   };
 
   const VictimCard = ({ victim }) => {

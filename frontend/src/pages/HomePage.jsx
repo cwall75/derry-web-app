@@ -64,7 +64,12 @@ const HomePage = () => {
 
           {/* Atmospheric Footer */}
           <div className="pt-16 text-center text-sm text-gray-600 typewriter-text">
-            <p>"We all float down here..."</p>
+            <p className="flex items-center justify-center gap-2">
+              "We all float down here..."
+              <span className="text-2xl animate-pulse" style={{ filter: 'drop-shadow(0 0 3px #dc143c)' }}>
+                🎈
+              </span>
+            </p>
           </div>
         </div>
       )}

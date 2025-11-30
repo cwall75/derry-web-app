@@ -15,11 +15,21 @@ const VictimDetailPage = () => {
   }, [id]);
 
   const loadVictim = async () => {
+    if (!id || isNaN(parseInt(id, 10))) {
+      setError('Invalid victim ID.');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
       const response = await victimApi.getById(id);
-      setVictim(response.data);
+      if (response.data) {
+        setVictim(response.data);
+      } else {
+        setError('Failed to load victim details. The case file may not exist.');
+      }
     } catch (err) {
       setError('Failed to load victim details. The case file may not exist.');
       console.error('Error loading victim:', err);
@@ -31,9 +41,14 @@ const VictimDetailPage = () => {
   const loadNextVictim = async () => {
     try {
       const response = await victimApi.getRandom();
-      navigate(`/victim/${response.data.id}`);
+      if (response.data && response.data.id) {
+        navigate(`/victim/${response.data.id}`);
+      } else {
+        setError('Failed to load next victim. Please try again.');
+      }
     } catch (err) {
       console.error('Error loading next victim:', err);
+      setError('Failed to load next victim. Please try again.');
     }
   };
 

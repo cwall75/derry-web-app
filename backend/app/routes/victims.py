@@ -48,6 +48,8 @@ async def get_random_victim():
                 personal_effects=[PersonalEffect(**e) for e in effects]
             )
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
@@ -137,9 +139,36 @@ async def get_victims(
                 query += " AND LOWER(last_seen_location) LIKE %s"
                 params.append(f"%{location.lower()}%")
 
-            # Get total count
-            count_query = f"SELECT COUNT(*) FROM ({query}) AS filtered"
-            cursor.execute(count_query, params)
+            # Get total count (use same WHERE conditions but without ORDER BY/LIMIT)
+            count_query = f"SELECT COUNT(*) FROM victims WHERE 1=1"
+            count_params = []
+            
+            if search:
+                count_query += " AND (LOWER(first_name) LIKE %s OR LOWER(last_name) LIKE %s OR LOWER(case_number) LIKE %s)"
+                search_pattern = f"%{search.lower()}%"
+                count_params.extend([search_pattern, search_pattern, search_pattern])
+            
+            if decade:
+                count_query += " AND decade = %s"
+                count_params.append(decade)
+            
+            if status:
+                count_query += " AND status = %s"
+                count_params.append(status)
+            
+            if age_min is not None:
+                count_query += " AND age_at_disappearance >= %s"
+                count_params.append(age_min)
+            
+            if age_max is not None:
+                count_query += " AND age_at_disappearance <= %s"
+                count_params.append(age_max)
+            
+            if location:
+                count_query += " AND LOWER(last_seen_location) LIKE %s"
+                count_params.append(f"%{location.lower()}%")
+            
+            cursor.execute(count_query, count_params)
             total = cursor.fetchone()['count']
 
             # Get victims

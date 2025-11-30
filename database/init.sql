@@ -36,10 +36,10 @@ CREATE TABLE IF NOT EXISTS personal_effects (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create indexes for faster searches
-CREATE INDEX idx_victims_last_name ON victims(last_name);
-CREATE INDEX idx_victims_disappearance_date ON victims(disappearance_date);
-CREATE INDEX idx_victims_decade ON victims(decade);
-CREATE INDEX idx_victims_status ON victims(status);
-CREATE INDEX idx_sightings_victim_id ON sightings(victim_id);
-CREATE INDEX idx_personal_effects_victim_id ON personal_effects(victim_id);
+-- Create indexes for faster searches (PostgreSQL 9.5+ supports IF NOT EXISTS)
+CREATE INDEX IF NOT EXISTS idx_victims_last_name ON victims(last_name);
+CREATE INDEX IF NOT EXISTS idx_victims_disappearance_date ON victims(disappearance_date);
+CREATE INDEX IF NOT EXISTS idx_victims_decade ON victims(decade);
+CREATE INDEX IF NOT EXISTS idx_victims_status ON victims(status);
+CREATE INDEX IF NOT EXISTS idx_sightings_victim_id ON sightings(victim_id);
+CREATE INDEX IF NOT EXISTS idx_personal_effects_victim_id ON personal_effects(victim_id);
