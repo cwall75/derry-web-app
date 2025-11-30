@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-derry-dark text-gray-200 font-typewriter;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-vintage;
+  }
+}
+
+@layer components {
+  .poster-container {
+    @apply bg-derry-paper text-gray-900 shadow-2xl;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+  }
+
+  .poster-border {
+    @apply border-8 border-black;
+    box-shadow:
+      inset 0 0 20px rgba(0, 0, 0, 0.1),
+      0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .missing-header {
+    @apply text-6xl font-bold text-derry-blood tracking-wider;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Impact', sans-serif;
+  }
+
+  .case-number {
+    @apply font-mono text-sm tracking-wider;
+    letter-spacing: 0.1em;
+  }
+
+  .vintage-button {
+    @apply bg-derry-charcoal text-derry-paper px-6 py-3 rounded-none border-2 border-derry-aged;
+    @apply hover:bg-derry-blood hover:border-derry-red transition-all duration-300;
+    @apply font-vintage text-lg tracking-wide shadow-lg;
+  }
+
+  .victim-photo {
+    @apply border-4 border-black shadow-lg;
+    filter: sepia(0.2) contrast(1.1);
+  }
+
+  .creepy-title {
+    font-family: 'Creepster', cursive;
+    @apply text-derry-red;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  }
+
+  .typewriter-text {
+    font-family: 'Special Elite', monospace;
+  }
+}
+
+/* Custom animations */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.flicker {
+  animation: flicker 3s infinite;
+}
+
+/* Aged paper effect */
+.aged-paper {
+  position: relative;
+}
+
+.aged-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 50%, transparent 0%, rgba(139, 69, 19, 0.05) 100%),
+    radial-gradient(circle at 80% 80%, transparent 0%, rgba(139, 69, 19, 0.03) 100%);
+  pointer-events: none;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 4px solid rgba(139, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #dc143c;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

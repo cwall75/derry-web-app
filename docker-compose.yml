@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: derry-postgres
+    environment:
+      POSTGRES_DB: derry_missing
+      POSTGRES_USER: derry_admin
+      POSTGRES_PASSWORD: pennywise1958
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./database/derry_missing_backup.sql:/docker-entrypoint-initdb.d/02-derry_missing_backup.sql:ro
+      - ./database/init-db.sh:/docker-entrypoint-initdb.d/00-init-db.sh:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U derry_admin -d derry_missing"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - derry-network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: derry-backend
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: derry_missing
+      DB_USER: derry_admin
+      DB_PASSWORD: pennywise1958
+      STATIC_PATH: /app/static
+    volumes:
+      - ./backend:/app
+      - ./static:/app/static:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - derry-network
+    restart: unless-stopped
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: derry-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - derry-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  derry-network:
+    driver: bridge
