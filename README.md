@@ -372,15 +372,30 @@ ports:
   - "8080:80"  # Frontend on 8080 instead of 80
 ```
 
+## 👥 Contributors
+
+This project was made possible by the following contributors:
+
+- **Cory Wallace** - Project Lead & Vision
+- **Claude** (Anthropic) - AI Development Assistant
+- **Claude Code** - Interactive Development Environment
+- **Cursor** - Code Editor & Development Tools
+- **OpenAI DALL-E** - AI-Generated Victim Photos
+
+## 🙏 Credits & Acknowledgments
+
+- **Stephen King** - Original "IT" novel and characters
+- **Google Fonts** - Creepster and Special Elite fonts
+- **PostgreSQL** - Database system
+- **FastAPI** - Backend framework
+- **React** - Frontend framework
+- **Docker** - Containerization platform
+
 ## 📝 License
 
-This project is for educational and entertainment purposes. Stephen King's "IT" and all related characters are property of Stephen King.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Credits
-
-- **Stephen King** - Original IT novel and characters
-- **AI-Generated Images** - Victim photos created with AI
-- **Fonts**: Creepster, Special Elite (Google Fonts)
+**Note**: This project is for educational and entertainment purposes. Stephen King's "IT" and all related characters are property of Stephen King. All victim names and photos are fictional and AI-generated.
 
 ## 🌟 Future Enhancements
 
